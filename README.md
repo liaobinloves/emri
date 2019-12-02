@@ -1,2 +1,2 @@
 # emri
-My works on Extreme-Mass-Ratio-Insprial system and TDE.
+My works on Extreme-Mass-Ratio-Inspirals system and TDE.
