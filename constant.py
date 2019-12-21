@@ -10,4 +10,4 @@ class Constant:
     c = 29979245800. # light speed, cm/s
     au = 14959787070000. # distance between Sun and Earth, cm
     pc = au*360*60*60/(2*pi) # 1 parsecond, cm
-        
+    
