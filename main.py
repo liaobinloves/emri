@@ -1,6 +1,5 @@
 import numpy as np
-import constant as cons
-from astropy import constants as co
+from astropy import constants as c
 from astropy import units as u
 import matplotlib.pyplot as plt
 import sub
@@ -22,11 +21,14 @@ class Parameter:
 
 class DF:
     sigma = 103 * u.km/u.s
-    M_g = 4.31e6 * co.M_sun
-    rc = co.G*M_g/sigma**2
+    M_g = 4.31e6 * c.M_sun
+    m_star = 6.4e6 * c.M_sun
+    rc = c.G*M_g/sigma**2
+    n_star = 3.*m_star/(4.*np.pi*rc**3*c.M_sun)
+
+    constant = n_star/(2.*np.pi*sigma**2)**1.5
 
     def __init__(self, kind='MS'):
-        self.cons = cons.Constant
         self.kind = kind
 
     def __setattr__(self, name, value):
@@ -39,23 +41,22 @@ class DF:
         return np.append(self.lhs(energy[tmp]), self.rhs(energy[~tmp]))
 
     def lhs(self, energy):
-        n_star = 2.8e5/self.cons.pc**3
+        n_star = 2.8e5/c.pc**3
         sigma = 1.03e7
         return 2*n_star/(2*np.pi*sigma**2)**1.5*(-energy/sigma**2)**self.par['pm']
 
     def rhs(self, energy):
         sigma = 1.03e7
-        n_star = 2.8e5/self.cons.pc**3
+        n_star = 2.8e5/c.pc**3
         return n_star/(2*np.pi*sigma**2)**1.5*np.exp(-energy/sigma**2)
 
-def cal_energy(e, rp):
-    c = cons.Constant
-    return -(1-e)*c.G*c.Mmilky/rp/2.
+    def cal_energy(self, e, rp):
+        return -(1-e)*c.G*self.M_g/rp/2.
 
 def main():
     # df = DF('MS')
     # print(df.par)
-    # c = cons.Constant
+    # c = c.Constant
     # x = np.linspace(-10000, 10000, 256)
     # y = df(x)
 
@@ -76,7 +77,8 @@ def main():
     # ax.plot(x2, y2, c='b')
     # plt.savefig('rp_rc.png')
 
-    print(co.e)
+    t = DF()
+    print(t.constant.cgs)
 
 
 if __name__ == '__main__':
