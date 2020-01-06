@@ -40,6 +40,19 @@ class DF:
         tmp = energy < 0
         return np.append(self.lhs(energy[tmp]), self.rhs(energy[~tmp]))
 
+    def _ms_rtde(self):
+        return 7e12*(self.M_g/(1e6*c.M_sun))**(1./3)*u.cm
+
+    def _wd_rtde(self):
+        return
+
+    @property
+    def rtde(self):
+        if self.kind == 'MS':
+            return self._ms_rtde()
+        elif self.kind == 'WD':
+            return self._wd_rtde()
+
     def lhs(self, energy):
         n_star = 2.8e5/c.pc**3
         sigma = 1.03e7
@@ -78,7 +91,8 @@ def main():
     # plt.savefig('rp_rc.png')
 
     t = DF()
-    print(t.constant.cgs)
+    print(t.rtde)
+    print(4.31**(1./3)*7e12)
 
 
 if __name__ == '__main__':
