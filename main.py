@@ -30,6 +30,7 @@ class DF:
 
     def __init__(self, kind='MS'):
         self.kind = kind
+        self.rtde = self._rtde()
 
     def __setattr__(self, name, value):
         if name == 'kind':
@@ -44,10 +45,13 @@ class DF:
         return 7e12*(self.M_g/(1e6*c.M_sun))**(1./3)*u.cm
 
     def _wd_rtde(self):
-        return
+        miu = 2.
+        mm = 5.816*c.M_sun/miu**2
+        m_wd = 0.6*c.M_sun
+        r_wd = 0.0225/miu*(1-(m_wd/mm)**(4./3))**0.5/(m_wd/mm)**(1./3)*c.R_sun
+        return (self.M_g/0.6/c.M_sun)**(1./3)*r_wd
 
-    @property
-    def rtde(self):
+    def _rtde(self):
         if self.kind == 'MS':
             return self._ms_rtde()
         elif self.kind == 'WD':
@@ -90,9 +94,9 @@ def main():
     # ax.plot(x2, y2, c='b')
     # plt.savefig('rp_rc.png')
 
-    t = DF()
-    print(t.rtde)
-    print(4.31**(1./3)*7e12)
+    t1 = DF('MS')
+    t2 = DF('WD')
+    print((t1.rtde/t2.rtde).cgs)
 
 
 if __name__ == '__main__':
