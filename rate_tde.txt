@@ -1,5 +1,5 @@
 type;	rate per two years;
-MS	7.6e-2
-WD	
+MS	0
+WD	3.8e-4
 NS
 BH
